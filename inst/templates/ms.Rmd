@@ -38,7 +38,7 @@ output            : papaja::apa6_pdf
 ```{r global_options, include = FALSE}
 # set global options for output images
 # tidy.opts = margin cutoff point and wraps text to the next line
-knitr::opts_chunk$set(fig.path = "../output/Figures/", 
+knitr::opts_chunk$set(fig.path = "../output/figures/", 
                       echo = FALSE, warning = FALSE, message = FALSE,
                       tidy.opts = list(width.cutoff = 72))
 
@@ -49,19 +49,9 @@ knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
 ```{r load_packages, include = FALSE, warning = FALSE, message = FALSE}
 
 # for knitting latex to pdf in windows
-Sys.setenv(JAVA_HOME = "C:\\Programme\\Java\\jre1.8.0_171")
+# Sys.setenv(JAVA_HOME = "C:\\Programme\\Java\\jre1.8.0_171")
 
-# filenames for figures
-fig1 <- "../output/Figures/response_fig1.pdf"
-fig2 <- "../output/Figures/response_fig2.pdf"
-fig3 <- "../output/Figures/response_fig3.pdf"
-fig4 <- "../output/Figures/response_fig4.pdf"
-fig5 <- "../output/Figures/response_fig5.pdf"
-fig6 <- "../output/Figures/response_fig6.pdf"
-
-# load all variables and run analysis
-source("response_do.R")
-
+source("@@name@@_do.R")
 ```
 # Introduction
 
