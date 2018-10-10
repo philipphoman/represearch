@@ -4,12 +4,10 @@
 \alias{create_package}
 \title{create_package}
 \usage{
-create_package(project_name, folder)
+create_package(project_name)
 }
 \arguments{
 \item{project_name}{Name of the project.}
-
-\item{folder}{Root folder to start the project in. Default: ~/projects}
 }
 \description{
 This function creates an R package from scratch.

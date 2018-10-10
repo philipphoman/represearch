@@ -8,15 +8,13 @@
 #'
 #' This function creates an R package from scratch.
 #' @param project_name Name of the project.
-#' @param folder Root folder to start the project in. Default: ~/projects
 #' @keywords module R 
 #' @export
 #' @examples
 #' create_package("myproject", "~/tmp")
-create_package <- function(project_name, folder) {
+create_package <- function(project_name) {
   # credit:
   # hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
-  setwd(folder)
   devtools::create(project_name)
 }
 
