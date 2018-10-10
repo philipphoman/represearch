@@ -63,7 +63,10 @@
 #+LATEX_HEADER: \normalsize{$^{1}$@@inst@@}\\
 #+LATEX_HEADER: \\
 #+LATEX_HEADER: \normalsize{$^\ast$Corresponding author. E-mail: } 
-#+LATEX_HEADER: \normalsize{@@email@@.}
+#+LATEX_HEADER: \normalsize{@@email@@.}\\
+#+LATEX_HEADER: \\
+#+LATEX_HEADER: \normalsize{\textbf{Keywords:} } 
+#+LATEX_HEADER: \normalsize{@@keywords@@} 
 #+LATEX_HEADER: }
 # ----------------------------------------------------------------------
 ** Buffer-wide source code blocks                             :ignore:
@@ -192,8 +195,8 @@ source("@@name@@_load.R")
 \clearpage
 
 * References                                                  :ignore:
-\bibliographystyle{nature}
-\bibliography{master}
+\bibliographystyle{@@bibstyle@@}
+\bibliography{@@bibliography@@}
 \clearpage
 
 * Tables and Figures

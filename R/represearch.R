@@ -29,15 +29,15 @@ create_package <- function(project_name) {
 #' @param root The root folder for the project
 #' @keywords module R reproducible research
 #' @export
-#' @examples create_project("myproject", "My Author", "myemail@me.com",
-#'     "My Institution", "rootdirectory")
+#' @examples create_project(tags=list("date"=date()), flavor="org-mode")
 create_project <- function(tags=list("name"="myproject",
                                      "title"="My Project",
                                      "author"="Firstname Lastname",
                                      "email"="lastname at inst dot edu",
                                      "date"=date(),
                                      "inst"="My Institution",
-                                     "root"="~\\/projects")) {
+                                     "root"="~\\/projects"),
+                           flavor="org-mode") {
   subdirs <- c(
     "src",
     "lib",
@@ -55,6 +55,7 @@ create_project <- function(tags=list("name"="myproject",
     "LICENSE",
     "Makefile",
     "ms.org",
+    "ms.Rmd",
     "clean.R",
     "func.R",
     "do.R",
@@ -80,6 +81,7 @@ create_project <- function(tags=list("name"="myproject",
     paste(tags$name, "LICENSE", sep="/"),
     paste(tags$name, "Makefile", sep="/"),
     paste(tags$name, "/src/",tags$name, "_ms.org", sep=""),
+    paste(tags$name, "/src/",tags$name, "_ms.Rmd", sep=""),
     paste(tags$name, "/src/",tags$name, "_clean.R", sep=""),
     paste(tags$name, "/src/",tags$name, "_load.R", sep=""),
     paste(tags$name, "/src/",tags$name, "_func.R", sep=""),

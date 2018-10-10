@@ -5,8 +5,9 @@
 \title{create_project}
 \usage{
 create_project(tags = list(name = "myproject", title = "My Project",
-  author = "Firstname Lastname", email = "lastname at inst dot edu", inst =
-  "My Institution", root = "~\\\\/projects"))
+  author = "Firstname Lastname", email = "lastname at inst dot edu", date =
+  date(), inst = "My Institution", root = "~\\\\/projects"),
+  flavor = "org-mode")
 }
 \arguments{
 \item{name}{The name of the project}
@@ -25,8 +26,7 @@ create_project(tags = list(name = "myproject", title = "My Project",
 This function sets up the typical file structure for projects
 }
 \examples{
-create_project("myproject", "My Author", "myemail@me.com",
-    "My Institution", "rootdirectory")
+create_project(tags=list("date"=date()), flavor="org-mode")
 }
 \keyword{R}
 \keyword{module}

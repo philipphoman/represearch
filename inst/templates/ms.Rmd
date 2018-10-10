@@ -1,0 +1,113 @@
+---
+title             : "@@title"
+shorttitle        : "@@shortitle@@"
+
+author: 
+  - name          : "@@author@@"
+    affiliation   : "1*"
+    corresponding : yes    # Define only one corresponding author
+    address       : "@@inst@@"
+
+affiliation:
+  - id            : "1"
+    institution   : "@@inst@@"
+
+abstract: |
+  This is the abstract.
+ 
+keywords          : "@@keywords@@" 
+
+bibliography      : ["@@bibliography@@.bib"]
+bibliostyle       : apa-5th-edition.csl
+
+fontsize          : 9pt
+figsintext        : yes
+fig_caption				: true
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+mask              : no
+
+class             : "jou"
+output            : papaja::apa6_pdf
+---
+	
+```{r global_options, include = FALSE}
+# set global options for output images
+# tidy.opts = margin cutoff point and wraps text to the next line
+knitr::opts_chunk$set(fig.path = "../output/Figures/", 
+                      echo = FALSE, warning = FALSE, message = FALSE,
+                      tidy.opts = list(width.cutoff = 72))
+
+# set global options for knitr
+knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
+
+```
+```{r load_packages, include = FALSE, warning = FALSE, message = FALSE}
+
+# for knitting latex to pdf in windows
+Sys.setenv(JAVA_HOME = "C:\\Programme\\Java\\jre1.8.0_171")
+
+# filenames for figures
+fig1 <- "../output/Figures/response_fig1.pdf"
+fig2 <- "../output/Figures/response_fig2.pdf"
+fig3 <- "../output/Figures/response_fig3.pdf"
+fig4 <- "../output/Figures/response_fig4.pdf"
+fig5 <- "../output/Figures/response_fig5.pdf"
+fig6 <- "../output/Figures/response_fig6.pdf"
+
+# load all variables and run analysis
+source("response_do.R")
+
+```
+# Introduction
+
+## Subsection 
+
+```{r fig1capt}
+
+fig1capt <- "**This is a figure caption.**"
+
+```
+
+```{r fig1, include = TRUE, fig.cap = fig1capt}
+
+# plot data
+#plot(p1)
+# include_graphics(fig1)
+```
+
+# Methods
+
+## Statistical analysis
+
+## Data and code availability
+This paper has been written using RStudio (Version 1.1.456) and knitr
+(Version 1.20). All data and code are freely available online to ensure
+reproducibility at @@github@@.
+
+# Results
+
+# Discussion
+
+## Limitations
+
+## Conclusions
+
+# Acknowledgments
+
+# Conflict of interest
+
+# References
+
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
