@@ -94,7 +94,7 @@ reproducibility at @@github@@.
 # References
 
 ```{r create_r-references}
-r_refs(file = "r-references.bib")
+# r_refs(file = "r-references.bib")
 ```
 
 \begingroup
