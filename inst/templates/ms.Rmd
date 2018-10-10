@@ -6,7 +6,9 @@ author:
   - name          : "@@author@@"
     affiliation   : "1*"
     corresponding : yes    # Define only one corresponding author
-    address       : "@@inst@@"
+    address       : "@@inst@@" 
+    email         : "@@email@@"
+
 
 affiliation:
   - id            : "1"
