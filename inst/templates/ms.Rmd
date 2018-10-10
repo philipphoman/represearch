@@ -77,7 +77,7 @@ fig1capt <- "**This is a figure caption.**"
 ## Data and code availability
 This paper has been written using RStudio (Version 1.1.456) and knitr
 (Version 1.20). All data and code are freely available online to ensure
-reproducibility at @@github@@.
+reproducibility at @@git@@.
 
 # Results
 
