@@ -1,6 +1,8 @@
+#
 # represearch.R 
 #
-# PH, 10/9/18
+# created on Wed Oct 10 17:18:05 2018
+# Philipp Homan, <phoman1 at northwell dot edu>
 #-----------------------------------------------------------------------
 #' create_package 
 #'
