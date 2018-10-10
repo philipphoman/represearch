@@ -32,8 +32,12 @@ create_package <- function(project_name) {
 #' @examples create_project(tags=list("date"=date()), flavor="org-mode")
 create_project <- function(tags=list("name"="myproject",
                                      "title"="My Project",
+                                     "shorttitle"="My short title",
                                      "author"="Firstname Lastname",
                                      "email"="lastname at inst dot edu",
+                                     "bibliography"="master",
+                                     "bibstyle"="nature",
+                                     "keywords"="git; org-mode; R",
                                      "date"=date(),
                                      "inst"="My Institution",
                                      "root"="~\\/projects"),

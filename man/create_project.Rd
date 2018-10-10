@@ -5,9 +5,10 @@
 \title{create_project}
 \usage{
 create_project(tags = list(name = "myproject", title = "My Project",
-  author = "Firstname Lastname", email = "lastname at inst dot edu", date =
-  date(), inst = "My Institution", root = "~\\\\/projects"),
-  flavor = "org-mode")
+  shorttitle = "My short title", author = "Firstname Lastname", email =
+  "lastname at inst dot edu", bibliography = "master", bibstyle = "nature",
+  keywords = "git; org-mode; R", date = date(), inst = "My Institution",
+  root = "~\\\\/projects"), flavor = "org-mode")
 }
 \arguments{
 \item{name}{The name of the project}
