@@ -35,6 +35,7 @@ create_project <- function(tags=list("name"="myproject",
                                      "title"="My Project",
                                      "author"="Firstname Lastname",
                                      "email"="lastname at inst dot edu",
+                                     "date"=date(),
                                      "inst"="My Institution",
                                      "root"="~\\/projects")) {
   subdirs <- c(
