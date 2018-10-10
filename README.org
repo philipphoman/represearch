@@ -112,51 +112,10 @@
 Philipp Homan <phoman1 at northwell dot edu>
 
 ** Getting Started
-This repository contains all the data and analysis code to reproduce the
-manuscript Making Research Reproducible. These instructions describe how to obtain a copy
-of the project up and running on your local machine for reproducing the
-analysis described in the manuscript. The repository contains a Makefile
-which reflects the dependencies of the analysis; analysis, figures and
-manuscript can be produced by simply typing 'make' from the Unix command
-line.
+This repository contains all the functions. 
  
-*** Prerequisites
-**** Code                                             :noexport:ignore:
-#+BEGIN_SRC R :exports none :results silent :session
-# R version
-rvers <- version$version.string
-
-# Python version
-# pyvers <- system("python --version")
-# pysurfvers <- system("pip freeze | grep pysurf")
-#pyvers <- "2.7.13"
-#pysurfvers <- "0.7"
-pyplusvers <- system("pyv=$(python -V 2>&1); echo $pyv", intern=TRUE)
-pysurfplusvers <- system("pip list | grep pysurf", intern=TRUE)
-sessInfo <- sessionInfo()
-#+END_SRC
-
-**** Text                                                      :ignore:
-All analyses were conducted with the R software src_R[:session]{rvers}
-{{{results(R version 3.3.2 (2016-10-31))}}}. Mixed models were estimated
-using the lme4 library, src_R[:session]{pyplusvers} {{{results(Python
-2.7.13)}}} and src_R[:session]{pysurfplusvers} {{{results(pysurfer
-(0.7))}}} were also used. The full session info under R can be found at
-the end of this file
-
 ** Installing
 Clone the repository or download the zip file.
-
-** Running the analysis
-Change to the represearch directory and run 'make analysis'.
-
-** Producing the figures
-Change to the represearch directory and run 'make figures'. The figures can then
-be found in output/figures.
-
-** Producing the manuscript
-Change to the represearch directory and run 'make manuscript'. The manuscript
-will be in src/.
 
 ** Built With
 src_bash{lsb_release -sd} {{{results(Ubuntu 17.10)}}} on emacs
@@ -164,7 +123,7 @@ src_elisp{emacs-version} {{{results(25.2.2)}}} and org-mode
 src_elisp{org-version} {{{results(9.1.7)}}}.
 
 ** Session info
-#+BEGIN_SRC R :results output :exports results 
+#+BEGIN_SRC R :results output :exports results :session mysession 
 sessionInfo()
 #+END_SRC
 
