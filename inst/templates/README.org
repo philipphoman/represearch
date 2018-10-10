@@ -118,7 +118,19 @@ line.
  
 *** Prerequisites
 **** Code                                             :noexport:ignore:
-#+INCLUDE: version.R src R :exports none :results silent :session
+#+BEGIN_SRC R :results silent :exports none :session 
+# R version
+rvers <- version$version.string
+
+# Python version
+# pyvers <- system("python --version")
+# pysurfvers <- system("pip freeze | grep pysurf")
+#pyvers <- "2.7.13"
+#pysurfvers <- "0.7"
+pyplusvers <- system("pyv=$(python -V 2>&1); echo $pyv", intern=TRUE)
+pysurfplusvers <- system("pip list | grep pysurf", intern=TRUE)
+sessInfo <- sessionInfo()
+#+END_SRC
 
 **** Text                                                      :ignore:
 All analyses were conducted with the R software src_R[:session]{rvers}
