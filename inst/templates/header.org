@@ -1,0 +1,7 @@
+#+OPTIONS: email:t toc:nil num:nil author:t date:t 
+#+STARTUP: align fold
+#+SEQ_TODO: TODO(t) | DONE(d)
+#+TAGS: figure(f) check(c) noexport(n) ignore(i)
+#+LANGUAGE: en
+#+EXCLUDE_TAGS: noexport TODO
+#+DATE: {{{time(%Y-%m-%d %H:%M)}}}

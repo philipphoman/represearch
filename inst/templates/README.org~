@@ -1,0 +1,151 @@
+* Structural similarity networks and treatment response 
+* Preamble                                                    :ignore:
+** org specific settings                                        :ignore:
+# ----------------------------------------------------------------------
+#+OPTIONS: email:t toc:nil num:nil author:t date:t 
+#+STARTUP: align fold
+#+SEQ_TODO: TODO(t) | DONE(d)
+#+TAGS: figure(f) check(c) noexport(n) ignore(i)
+#+LANGUAGE: en
+#+EXCLUDE_TAGS: noexport TODO
+#+DATE: {{{time(%Y-%m-%d %H:%M)}}}
+# ----------------------------------------------------------------------
+** Buffer-wide source code blocks                               :ignore:
+# ----------------------------------------------------------------------
+# Set elisp variables need for nice formatting We want no new lines in
+# inline results and a paragraph size of 80 characters Important: this
+# has to be evaluated witch C-c C-c in order to work in the current
+# buffer
+#+BEGIN_SRC emacs-lisp :exports none :results silent
+
+(require 'ox-md nil t)
+; set timestamp format
+;(setq org-export-date-timestamp-format "%FT%T%z")
+(require 'org-wc)
+(flyspell-mode t)
+;(evil-declare-change-repeat 'company-complete)
+(setq synosaurus-choose-method 'popup)
+(synosaurus-mode t)
+(auto-complete-mode t)
+;(ac-config-default)
+;(add-to-list 'ac-modes 'org-mode)
+(linum-mode t)
+(whitespace-mode t)
+(setq org-babel-inline-result-wrap "%s")
+(setq org-export-with-broken-links "mark")
+(setq fill-column 72)
+(setq whitespace-line-column 72)
+;(setq org-latex-caption-above '(table image))
+(setq org-latex-caption-above nil)
+(org-toggle-link-display)
+; don't remove logfiles at export
+(setq org-latex-remove-logfiles nil)
+
+; Keybindings
+; (global-set-key (kbd "<f7> c") "#+CAPTION: ")
+(defun setfillcolumn72 ()
+	 (interactive)
+   (setq fill-column 72)
+	 )
+
+(defun setfillcolumn42 ()
+	 (interactive)
+   (setq fill-column 42)
+ )
+(define-key org-mode-map (kbd "C-c c #") "#+CAPTION: ")
+(define-key org-mode-map (kbd "C-c l #") "#+LATEX_HEADER: ")
+(define-key org-mode-map (kbd "C-c f c 4 2") 'setfillcolumn42)
+(define-key org-mode-map (kbd "C-c f c 7 2") 'setfillcolumn72)
+
+(setq org-odt-category-map-alist
+    '(("__Figure__" "*Figure*" "value" "Figure" org-odt--enumerable-image-p)))
+
+
+; let ess not ask for starting directory
+(setq ess-ask-for-ess-directory nil)
+
+;(setq org-latex-pdf-process '("latexmk -pdflatex='xelatex
+;-output-directory=../output/tex/ -interaction nonstopmode' -pdf
+;-bibtex -f %f"))
+(setq org-latex-logfiles-extensions 
+    (quote("bcf" "blg" "fdb_latexmk" "fls" 
+    "figlist" "idx" "log" "nav" "out" "ptc" 
+    "run.xml" "snm" "toc" "vrb" "xdv")))
+
+; deactivate link resolving
+(setq org-activate-links nil)
+
+
+#+END_SRC
+#
+#
+#
+# ----------------------------------------------------------------------
+** End preamble                                                 :ignore:
+# ----------------------------------------------------------------------
+
+* Author
+Philipp Homan <phoman1 at northwell dot edu>
+* Getting Started
+This repository contains all the data and analysis code to reproduce the
+manuscript " Structural similarity networks predict clinical outcome in
+early-phase schizophrenia". These instructions describe how to obtain a
+copy of the project up and running on your local machine for reproducing
+the analysis described in the manuscript. The repository contains a
+Makefile which reflects the dependencies of the analysis; analysis,
+figures and manuscript can be produced by simply typing 'make' from the
+Unix command line.
+ 
+** Prerequisites
+*** Code                                               :noexport:ignore:
+#+BEGIN_SRC R :exports none :results silent :session
+# R version
+rvers <- version$version.string
+
+# Python version
+# pyvers <- system("python --version")
+# pysurfvers <- system("pip freeze | grep pysurf")
+#pyvers <- "2.7.13"
+#pysurfvers <- "0.7"
+pyplusvers <- system("pyv=$(python -V 2>&1); echo $pyv", intern=TRUE)
+pysurfplusvers <- system("pip list | grep pysurf", intern=TRUE)
+sessInfo <- sessionInfo()
+#+END_SRC
+
+*** Text                                                        :ignore:
+All analyses were conducted with the R software src_R[:session]{rvers}
+{{{results(R version 3.3.2 (2016-10-31))}}}.  Mixed models were
+estimated using the lme4 library, partial least squares regression were
+computed with the pls library, and brain graph metrics with the
+brainGraph and igraph libraries.  src_R[:session]{pyplusvers}
+{{{results(Python 2.7.13)}}} and src_R[:session]{pysurfplusvers}
+{{{results(pysurfer (0.7))}}} were used for visualizing the imaging
+results. The full session info under R can be found at the end of this
+file
+
+
+* Installing
+Clone the repository or download the zip file and run 'unzip ssn.zip'
+from the command line.
+
+* Running the analysis
+Change to the ssn directory and run 'make analysis'.
+
+* Producing the figures
+Change to the ssn directory and run 'make figures'. The figures can then
+be found in output/figures.
+
+* Producing the manuscript
+Change to the ssn directory and run 'make manuscript'. The manuscript
+will be in src/fe_ms.pdf
+
+* Built With
+Org-mode src_elisp{org-version} {{{results(9.1.9)}}}.
+
+* Session info
+#+BEGIN_SRC R :results output :exports results 
+source("src/fe_func.R")
+sessionInfo()
+#+END_SRC
+
+

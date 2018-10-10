@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module1" script:language="StarBasic" script:moduleType="normal">Sub AdjustLaTeXImport(optional fileName, optional StartPage, optional EndPage)
+	&apos;---------------------------------------------------------
+	&apos; This macro adjusts the formatting for a scientific
+	&apos; manuscript after conversion from LaTeX to rtf
+	&apos;
+	&apos; Author: Philipp Homan
+	&apos;---------------------------------------------------------
+  Dim oSearch
+  Dim oFound
+  Dim s$
+  Dim sLeading$
+  Dim lLeadLen As Long
+  Dim sFileURL$
+  
+  Dim this As Object
+  Dim Url As String
+  &apos;Dim Dummy() &apos;An (empty) array of PropertyValues
+  Dim FileProperties(1) As New com.sun.star.beans.PropertyValue
+
+
+   If (Not GlobalScope.BasicLibraries.isLibraryLoaded(&quot;Tools&quot;)) Then
+      GlobalScope.BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+   End If
+  
+	&apos;---------------------------------------------------------
+	&apos; open file
+	&apos;---------------------------------------------------------
+	If NOT IsMissing(FileName) Then
+    FileProperties(0).Name = &quot;Hidden&quot;
+    FileProperties(0).Value = True
+	  openFile = ConvertToURL(fileName &amp; &quot;.rtf&quot;)
+	  saveFile = ConvertToURL(fileName &amp; &quot;.docx&quot;)
+    this = StarDesktop.loadComponentFromUrl(openFile, &quot;_blank&quot;, 0, FileProperties)
+	Else
+	  this = ThisComponent
+	End If
+	&apos;---------------------------------------------------------
+		
+  &apos;---------------------------------------------------------
+	&apos; Replace nil by NA
+  &apos;---------------------------------------------------------
+  RDescrip = this.createReplaceDescriptor
+  RDescrip.searchRegularExpression = False
+	RDescrip.searchWords = True
+  RDescrip.searchString = &quot;nil&quot;
+  rngs = this.findAll(RDescrip)
+  RDescrip.replaceString =&quot;n/a&quot;
+  this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+
+
+  
+  &apos;---------------------------------------------------------
+	&apos; Remove latex2rtf image string pattern with image links
+  &apos;---------------------------------------------------------
+  RDescrip = this.createReplaceDescriptor
+  RDescrip.searchRegularExpression = True
+  RDescrip.searchString = &quot;\[###&quot;
+  rngs = this.findAll(RDescrip)
+  RDescrip.replaceString =&quot;&quot;
+  this.replaceAll(RDescrip)
+  RDescrip = this.createReplaceDescriptor
+  RDescrip.searchRegularExpression = True
+  RDescrip.searchString = &quot;###\]&quot;
+  rngs = this.findAll(RDescrip)
+  RDescrip.replaceString =&quot;&quot;
+  this.replaceAll(RDescrip)
+  oSearch = this.createSearchDescriptor
+  &apos;Inspect oSearch
+  With oSearch
+    .SearchString = &quot;/tmp.*.eps&quot;
+    .SearchRegularExpression = True
+  End With
+  oFound = this.findFirst(oSearch)
+  Do While Not IsNull(oFound)
+    &apos;s = oFound.getString()
+    s = oFound.getString()
+    s = &quot;file:&quot; &amp; s &amp; &quot;.png&quot;
+    s = convertToURL(s) 
+    If FileExists(s) Then
+      &apos;oFound.setString(&quot;FOUND &quot; &amp; s)
+      &apos;EmbedGraphic(this, oFound, s, &quot;OOoFigure&quot;)
+      objTextGraphicObject = this.createInstance(&quot;com.sun.star.text.TextGraphicObject&quot;)
+      objTextGraphicObject.GraphicURL = s 
+      &apos;objTextGraphicObject.GraphicURL = FileNameoutofPath(s) 
+      objTextGraphicObject.AnchorType = 5
+      
+      objTextGraphicObject.Surround = com.sun.star.text.WrapTextMode.NONE
+      oText = oFound.Text
+      oCurs = oText.createTextCursor()
+      oText.insertTextContent(oFound, objTextGraphicObject, false)
+      oFound.setString(&quot;&quot;)
+    Else
+      &apos;oFound.setString(objTextGraphicObject.)
+    End If    
+    oFound = this.findNext( oFound.End, oSearch)
+  Loop
+  &apos;---------------------------------------------------------
+
+
+  &apos;---------------------------------------------------------
+	&apos; Load scientific template
+  &apos;---------------------------------------------------------
+	dim document as object 
+	dim dispatcher as object 
+	dim template$
+	dim pth$
+	document = this.CurrentController.Frame 
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;) 
+	dim args1(1) as new com.sun.star.beans.PropertyValue 
+	pth = DirectoryNameoutofPath(fileName, &quot;/&quot;)
+	template = pth &amp; &quot;/scientifictemplate.ott&quot; 
+	template = ConvertToURL(template)
+	args1(0).Name = &quot;FileName&quot; 
+	args1(0).Value = template
+	args1(1).Name = &quot;Flags&quot; 
+	args1(1).Value = 21 
+	dispatcher.executeDispatch(document, &quot;.uno:LoadStyles&quot;, &quot;&quot;, 0, args1()) 
+  &apos;---------------------------------------------------------
+
+  &apos;---------------------------------------------------------
+	&apos; Remove any double spaces before citations
+  &apos;---------------------------------------------------------
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot; \[&quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot;[&quot;
+	this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+
+  &apos;---------------------------------------------------------
+	&apos; Remove brackets for references
+  &apos;---------------------------------------------------------
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;\[(\d+)\]\t&quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot;$1\t&quot;
+	this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+
+
+  &apos;---------------------------------------------------------
+	&apos; Make citations with numbers and parentheses (Am J Psych) 
+	&apos; Make citations with numbers (Mol Psych) 
+	&apos; Make citations with numbers and square parentheses (NPP) 
+  &apos;---------------------------------------------------------
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;\[([^\]]*)\]&quot;
+	rngs = this.findAll(RDescrip)
+	for i = 0 to rngs.count-1
+  foundText = rngs.getByIndex(i)
+  &apos;---------------------------------------------------------
+  &apos; to make upperscript citations (Nature style
+  &apos;---------------------------------------------------------
+  &apos;foundText.CharColor = RGB(255,0,0)
+  foundText.CharEscapement = 33
+  foundText.CharEscapementHeight = 58
+  &apos;---------------------------------------------------------
+  &apos; end 
+  &apos;---------------------------------------------------------
+
+	next i
+	&apos;RDescrip.replaceString =&quot; [$1]&quot;
+	RDescrip.replaceString =&quot;$1&quot;
+	this.replaceAll(RDescrip)
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;^Figure .+:&quot;
+	rngs = this.findAll(RDescrip)
+	for i = 0 to rngs.count-1
+  foundText = rngs.getByIndex(i)
+  &apos;foundText.CharColor = RGB(255,0,0)
+  foundText.charWeight = com.sun.star.awt.FontWeight.BOLD
+	next i
+
+
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;^Table .+:&quot;
+	rngs = this.findAll(RDescrip)
+	for i = 0 to rngs.count-1
+  foundText = rngs.getByIndex(i)
+  &apos;foundText.CharColor = RGB(255,0,0)
+  foundText.charWeight = com.sun.star.awt.FontWeight.BOLD
+	next i
+
+
+  &apos;---------------------------------------------------------
+	&apos; Remove any double white spaces
+  &apos;---------------------------------------------------------
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;  &quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot; &quot;
+	this.replaceAll(RDescrip)
+
+
+  &apos;---------------------------------------------------------
+	&apos; Remove any trailing white spaces
+  &apos;---------------------------------------------------------
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;^ &quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot;&quot;
+	this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+
+  &apos;---------------------------------------------------------
+	&apos; Remove any square brackets
+  &apos;---------------------------------------------------------
+	&apos;RDescrip = this.createReplaceDescriptor
+	&apos;RDescrip.searchRegularExpression = True
+	&apos;RDescrip.searchString = &quot;[\[\]]&quot;
+	&apos;rngs = this.findAll(RDescrip)
+	&apos;RDescrip.replaceString =&quot;&quot;
+	&apos;this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+
+
+  &apos;---------------------------------------------------------
+  &apos; embedd all images 
+  &apos;---------------------------------------------------------
+	Dim oDP &apos; Draw page
+	Dim oGraph &apos; Graph object in the draw page
+	Dim iLinked% &apos; Number of linked images
+	Dim iEmbedded% &apos; Number of embedded images
+	Dim iConverted% &apos; Linked images converted to embedded
+	Dim s1$ &apos; Graphic service name
+	Dim s2$ &apos; Graphic service name
+
+	REM Only know how to convert these types
+	s1 = &quot;com.sun.star.drawing.GraphicObjectShape&quot;
+	s2 = &quot;com.sun.star.text.TextGraphicObject&quot;
+	oDoc = this
+
+	REM Get the document draw page and then enumerate the images.
+	oDP = oDoc.getDrawPage()
+	For i=0 To oDP.getCount()-1
+		oGraph = oDP.getByIndex(i)
+		If oGraph.supportsService(s1) OR oGraph.supportsService(s2) Then
+		  If InStr(oGraph.GraphicURL, &quot;vnd.sun&quot;) &lt;&gt; 0 Then
+		    iEmbedded = iEmbedded + 1
+			Else
+			  iLinked = iLinked + 1
+			  If EmbedLinkedGraphic(oGraph, oDoc) Then
+				  iConverted = iConverted + 1
+				End If
+	    End If
+	  End If
+	Next
+  &apos;---------------------------------------------------------
+
+  &apos;---------------------------------------------------------
+  &apos; Set images to original size
+  &apos;---------------------------------------------------------
+	SetImagesToOriginalSize(oDoc)
+
+  &apos;---------------------------------------------------------
+  &apos; Remove table borders
+  &apos;---------------------------------------------------------
+	&apos; RemoveTableBorders(oDoc)
+
+
+  &apos;---------------------------------------------------------
+  &apos; Word count
+  &apos;---------------------------------------------------------
+	dim mystartpos as long
+	dim numwords,nw 
+	dim nextwd as new com.sun.star.i18n.Boundary
+	dim aLocale as new com.sun.star.lang.Locale
+	aLocale.Language=&quot;en&quot;
+	
+	oText = this.Text
+	Curs = oText.createTextCursor
+	Curs.gotoStart(False)
+	Controller = this.CurrentController
+	TotalPages = Controller.PageCount
+	EndPage=TotalPages
+	StartPage=2
+	VC = Controller.ViewCursor
+	VC.gotoStart(False)
+	VC.jumptoNextPage
+	Curs.gotoRange(VC.Start, False)
+	totalWords = 0
+	Do while VC.Page &lt;= EndPage
+	   &apos;msgBox(&quot;We are on page: &quot; &amp;VC.Page)
+	   VC.jumptoEndOfPage
+	
+	   Curs.gotoRange(VC.Start, True)
+     dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+     dispatcher.executeDispatch(document, ".uno:ResetAttributes", "", 0, Array())
+
+     &apos; Set paragraph styles
+		 &apos;StyleName = VC.ParaStyleName
+		 &apos;Curs.ParaStyleName = StyleName
+
+	   &apos; Exit if string contains Acknowledgments
+		 IsLastPage = InStr(Curs.String, &quot;Acknowledgments&quot;)
+		 If IsLastPage Then
+		   Exit Do
+		 End If
+	
+     &apos; next if string contains Abstract 
+		 IsFirstPage = InStr(Curs.String, &quot;Abstract&quot;)
+	
+
+
+	   &apos;Curs.String now contains the text of the page
+	   &apos;msgBox(Curs.String)  
+	   &apos;xSel = this.getCurrentSelection()
+	   &apos;nSelCount = xSel.getCount()
+	   &apos;xDoc = this
+	   
+	   &apos;access easy document statistics
+	   &apos;nAllChars = xDoc.CharacterCount
+	   &apos;nAllWords = xDoc.WordCount
+	   &apos;nAllPars = xDoc.ParagraphCount
+
+			
+		numwords=0 &apos; don&apos;t ask me why we need this
+		mystartpos=0
+		brk=createUnoService(&quot;com.sun.star.i18n.BreakIterator&quot;)
+		nextwd=brk.nextWord(Curs.String, startpos, aLocale, com.sun.star.i18n.WordType.WORD_COUNT)
+		Do while nextwd.startPos &lt;&gt; nextwd.endPos 
+		  If IsFirstPage then
+				&apos; msgBox(&quot; Exiting loop, numwords is &quot; &amp; numwords)
+	      Exit Do
+			End If
+			numwords=numwords+1
+			nw=nextwd.startPos
+			nextwd=brk.nextWord(Curs.String, nw, aLocale, com.sun.star.i18n.WordType.WORD_COUNT)
+		Loop
+		&apos;msgBox(&quot;Words on page: &quot; &amp;numwords)
+		totalWords = totalWords + numwords
+	
+	
+	   &apos;If VC.Page &lt; TotalPages then
+	      VC.jumptoNextPage
+	      Curs.gotoRange(VC.Start, False)
+	   &apos;end If
+	Loop
+	&apos;msgBox(&quot;Total words: &quot; &amp;totalWords)
+	
+	&apos; Time stamp and word count
+  sTimeStamp = Format(Year(Now), &quot;0000&quot;) &amp;&quot;-&quot; &amp;_
+               Format(Month(Now), &quot;00&quot;) &amp;&quot;-&quot; &amp; _
+               Format(Day(Now), &quot;00&quot;) &amp;&quot; &quot; &amp;_
+               Format(Hour(Now), &quot;00&quot;) &amp;&quot;:&quot; &amp;_
+               Format(Minute(Now), &quot;00&quot;) &amp;&quot;:&quot; &amp;_
+               Format(Second(Now), &quot;00&quot;)
+
+	RDescrip = this.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;(\d\d\d\d-\d\d-\d\d \d\d:\d\d)&quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot;\nCreated with LaTeX on $1\nFormatting corrected with macro on &quot; &amp; sTimeStamp &amp; &quot; \n Words in manuscript: &quot; &amp;totalWords
+	this.replaceAll(RDescrip)
+
+
+
+  &apos;---------------------------------------------------------
+  &apos; Save to disk as docx
+  &apos;---------------------------------------------------------
+	if NOT IsMissing(FileName) Then 
+    oDoc = this
+		&apos; surl = ConvertToURL(saveFile)
+		&apos;surl = ConvertToURL(saveFile)
+		&apos;msgBox(surl)
+		oDoc.storeAsUrl(openFile, Array())
+		oDoc.storeAsUrl(saveFile, Array())
+		oDoc.storeAsUrl(&quot;file:///tmp/tmp.docx&quot;, Array())
+		oDoc.dispose() 
+
+		&apos;---------------------------------------------------------
+		&apos; Close docs and quit  
+		&apos;---------------------------------------------------------
+		dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+		Wait 1000 
+		dispatcher.executeDispatch(StarDesktop, &quot;.uno:Quit&quot;, &quot;&quot;, 0, Array())
+	End If
+End Sub
+
+	
+Function EmbedLinkedGraphic(oGraph, oDoc) As Boolean
+	REM Author: Andrew Pitonyak
+	Dim sGraphURL$ &apos; External URL of the image.
+	Dim oGraph_2 &apos; Created image.
+	Dim oCurs &apos; Cursor where the image is located.
+	Dim oText &apos; Text object containing image.
+	Dim oAnchor &apos; Anchor point of the image
+	Dim s1$ &apos; Graphic service name
+	Dim s2$ &apos; Graphic service name
+
+	EmbedLinkedGraphic = False
+	If InStr(oGraph.GraphicURL, &quot;vnd.sun&quot;) &lt;&gt; 0 Then
+  	REM Ignore an image that is already embedded
+	  Exit Function
+	End If
+
+	s1 = &quot;com.sun.star.drawing.GraphicObjectShape&quot;
+	s2 = &quot;com.sun.star.text.TextGraphicObject&quot;
+	If oGraph.supportsService(s1) Then
+  	REM Convert a GraphicObjectShape.
+	  oAnchor = oGraph.getAnchor()
+  	oText = oAnchor.getText()
+		oGraph_2 = ThisComponent.createInstance(s)
+		oGraph_2.GraphicObjectFillBitmap = oGraph.GraphicObjectFillBitmap
+		oGraph_2.Size = oGraph.Size
+		oGraph_2.Position = oGraph.Position
+
+
+		oText.insertTextContent(oAnchor, oGraph_2, False)
+		oText.removeTextContent(oGraph)
+		EmbedLinkedGraphic = True
+	ElseIf oGraph.supportsService(s2) Then
+	  REM Convert a TextGraphicObject.
+		Dim oBitmaps
+		Dim sNewURL$
+		Dim sName$
+
+		sName$ = oGraph.LinkDisplayName
+		oBitmaps = oDoc.createInstance( &quot;com.sun.star.drawing.BitmapTable&quot; )
+		If oBitMaps.hasByName(sName) Then
+		  Print &quot;Link display name &quot; &amp;sName &amp;&quot; already exists&quot;
+		  Exit Function
+		End If
+
+		&apos;Print &quot;Ready to insert &quot; &amp;sName
+		oBitmaps.insertByName(sName, oGraph.GraphicURL )
+		sNewURL$ = oBitmaps.getByName( sName )
+		&apos;Print &quot;inserted URL &quot; &amp;sNewURL
+		oGraph.GraphicURL = sNewURL
+		EmbedLinkedGraphic = True
+	End If
+End Function
+
+
+Function SetImagesToOriginalSize(oDoc)
+   Dim size As New com.sun.star.awt.Size
+   oDocument = oDoc
+   page = oDocument.drawPage   
+   nNumShapes = Page.getCount()
+   For i = 0 To nNumShapes - 1
+     oShape = Page.getByIndex( i )
+     ShapeWidth = oShape.actualSize.Width
+     ShapeHeight = oShape.actualSize.Height   
+     size.Width = ShapeWidth
+     size.Height = ShapeHeight   
+		 &apos; check if math or regular image
+		 If size.Width &lt; 20000 Then
+       oshape.setSize(size)
+		 End If
+   next i
+End Function
+
+Function RemoveTableBorders(oDoc)
+  oTextTables = oDoc.getTextTables()
+  nTables = oTextTables.getCount()
+    For i = 0 To nTables - 1
+      oTbl = oTextTables.getByIndex(i)
+			oTbl.TableBorder.BottomLine.OuterLineWidth = 0
+			oTbl.TableBorder.TopLine.OuterLineWidth = 0
+			oTbl.TableBorder.LeftLine.OuterLineWidth = 0
+			oTbl.TableBorder.RightLine.OuterLineWidth = 0
+		next i
+End Function
+
+Function RemoveEmptyLines()
+  &apos;---------------------------------------------------------
+	&apos; Remove empty lines
+  &apos;---------------------------------------------------------
+	RDescrip = ThisComponent.createReplaceDescriptor
+	RDescrip.searchRegularExpression = True
+	RDescrip.searchString = &quot;^$&quot;
+	rngs = this.findAll(RDescrip)
+	RDescrip.replaceString =&quot;&quot;
+	this.replaceAll(RDescrip)
+  &apos;---------------------------------------------------------
+End Function
+
+Function DocHandle(FileName)
+	&apos;---------------------------------------------------------
+	&apos; open file
+	&apos;---------------------------------------------------------
+	If NOT IsMissing(FileName) Then
+    FileProperties(0).Name = &quot;Hidden&quot;
+    FileProperties(0).Value = True
+	  openFile = ConvertToURL(fileName &amp; &quot;.rtf&quot;)
+	  saveFile = ConvertToURL(fileName &amp; &quot;.docx&quot;)
+    DocHandle = StarDesktop.loadComponentFromUrl(openFile, &quot;_blank&quot;, 0, FileProperties)
+	Else
+	  DocHandle = ThisComponent
+	End If
+	&apos;---------------------------------------------------------
+End Function	
+
+
+</script:module>

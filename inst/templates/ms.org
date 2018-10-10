@@ -1,0 +1,229 @@
+#+TITLE: *@@title@@*
+* Preamble                                                    :ignore:
+** General comments                                           :ignore:
+# ----------------------------------------------------------------------
+# @@name@@_ms.org
+#
+# created on @@date@@
+# @@author@@, <@@email@@>
+# ----------------------------------------------------------------------
+** Specific comments for this manuscript                      :ignore:
+# ----------------------------------------------------------------------
+# Potential reviewers:
+# ----------------------------------------------------------------------
+** org specific settings                                      :ignore:
+# ----------------------------------------------------------------------
+#+OPTIONS: email:nil toc:nil num:nil author:nil date:t tex:t
+#+STARTUP: align fold
+#+SEQ_TODO: TODO(t) | DONE(d)
+#+TAGS: figure(f) check(c) noexport(n) ignore(i)
+#+LANGUAGE: en
+#+EXCLUDE_TAGS: noexport TODO
+#+DATE: {{{time(%Y-%m-%d %H:%M)}}}
+# ----------------------------------------------------------------------
+** Latex header                                               :ignore:
+# ----------------------------------------------------------------------
+#+LATEX_CLASS:  myarticle
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{textcomp}
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage{mathtools}
+#+LATEX_HEADER: \usepackage[hidelinks]{hyperref}
+#+LATEX_HEADER: \urlstyle{same}
+# LATEX_HEADER: \usepackage{natbib}
+#+LATEX_HEADER: \usepackage{cite}
+#+LATEX_HEADER: \usepackage[labelfont=bf]{caption}
+#+LATEX_HEADER: \usepackage{times}
+# LATEX_HEADER: \renewcommand{\familydefault}{bch}
+#+LATEX_HEADER: \usepackage[T1]{fontenc}
+#+LATEX_HEADER: \graphicspath{{../output/figures/}{../lib/}}
+#+LATEX_HEADER: \topmargin 0.0cm
+#+LATEX_HEADER: \oddsidemargin 0.2cm
+#+LATEX_HEADER: \textwidth 16cm 
+#+LATEX_HEADER: \textheight 21cm
+#+LATEX_HEADER: \footskip 1.0cm
+#+LATEX_HEADER: \DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{% 
+#+LATEX_HEADER:       #1\;\delimsize\|\;#2% 
+#+LATEX_HEADER: } 
+#+LATEX_HEADER: \newcommand{\noop}[1]{}
+#+LATEX_HEADER: \newcommand{\infdiv}{D_{KL}\infdivx} 
+#+LATEX_HEADER: \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+#+LATEX_HEADER: \newcommand\sumin{\sum_{i=1}^{n}}
+#+LATEX_HEADER: \newcommand{\Xoi}[1]{#1(i)}
+#+LATEX_HEADER: \newcommand{\frakPQ}[2]{\frac{\Xoi{#1}}{\Xoi{#2}}}
+#+LATEX_HEADER: \newcommand{\DKLPQ}[3]{D_{\mathrm{KL}}(#1 #3 #2)}
+# LATEX_HEADER: \usepackage{indentfirst}
+# ----------------------------------------------------------------------
+** Authors and affiliations                                   :ignore:
+# ----------------------------------------------------------------------
+#+LATEX_HEADER: \author{
+#+LATEX_HEADER: @@author@@$^{1\ast}$, 
+#+LATEX_HEADER: \\
+#+LATEX_HEADER: \normalsize{$^{1}$@@inst@@}\\
+#+LATEX_HEADER: \\
+#+LATEX_HEADER: \normalsize{$^\ast$Corresponding author. E-mail: } 
+#+LATEX_HEADER: \normalsize{@@email@@.}
+#+LATEX_HEADER: }
+# ----------------------------------------------------------------------
+** Buffer-wide source code blocks                             :ignore:
+# ----------------------------------------------------------------------
+# Set elisp variables need for nice formatting We want no new lines in
+# inline results and a paragraph size of 80 characters Important: this
+# has to be evaluated witch C-c C-c in order to work in the current
+# buffer
+#+BEGIN_SRC emacs-lisp :exports none :results silent
+
+; set timestamp format
+;(setq org-export-date-timestamp-format "%ft%t%z")
+(require 'org-wc)
+(flyspell-mode t)
+(synosaurus-mode t)
+(auto-complete-mode t)
+(linum-mode t)
+(whitespace-mode t)
+(setq org-babel-inline-result-wrap "%s")
+(setq org-export-with-broken-links "mark")
+(setq fill-column 72)
+(setq whitespace-line-column 72)
+;(setq org-latex-caption-above '(table image))
+(setq org-latex-caption-above nil)
+(org-toggle-link-display)
+; don't remove logfiles at export
+(setq org-latex-remove-logfiles nil)
+
+; keybindings
+; (global-set-key (kbd "<f7> c") "#+CAPTION: ")
+(defun setfillcolumn72 ()
+	(interactive)
+	(setq fill-column 72)
+)
+
+(defun setfillcolumn42 ()
+	(interactive)
+	(setq fill-column 42)
+)
+(define-key org-mode-map (kbd "C-c #") "#+CAPTION: ")
+(define-key org-mode-map (kbd "C-c f c 4 2") 'setfillcolumn42)
+(define-key org-mode-map (kbd "C-c f c 7 2") 'setfillcolumn72)
+
+(setq org-odt-category-map-alist
+	 '(("__figure__" "*figure*" "value" "figure" org-odt--enumerable-image-p)))
+
+; let ess not ask for starting directory
+(setq ess-ask-for-ess-directory nil)
+
+;(setq org-latex-pdf-process '("latexmk -pdflatex='xelatex
+;-output-directory=../output/tex/ -interaction nonstopmode' -pdf
+;-bibtex -f %f"))
+
+;(setq org-latex-pdf-process '("latexmk -pdf 
+;	-pdflatex='xelatex -shell-escape -interaction nonstopmode' -bibtex -f %f "))
+(setq org-latex-pdf-process '("latexmk -pdflatex='xelatex -interaction nonstopmode' -shell-escape -pdf -bibtex -f %f"))
+
+(setq org-latex-logfiles-extensions 
+	 (quote("bcf" "blg" "fdb_latexmk" "fls" 
+	 "figlist" "idx" "log" "nav" "out" "ptc" 
+	 "run.xml" "snm" "toc" "vrb" "xdv")))
+
+(add-to-list 'org-structure-template-alist
+ '("ca" "#+CAPTION: "))
+
+(add-to-list 'org-structure-template-alist
+ '("he" "#+LATEX_HEADER: "))
+
+(add-to-list 'org-structure-template-alist
+ '("dc" "src_R[:session]{}"))
+
+(add-to-list 'org-structure-template-alist
+ '("sr" "#+HEADER: :exports none
+,#+begin_src R :colnames yes :results silent :session\n")) 
+
+(add-to-list 'org-structure-template-alist
+ '("er" "#+END_SRC"))
+
+#+END_SRC
+# ----------------------------------------------------------------------
+# End preamble
+# ----------------------------------------------------------------------
+# Start with doublespacing 
+\doublespacing
+\clearpage
+
+** End preamble                                               :ignore:
+# ----------------------------------------------------------------------
+# Start with doublespacing 
+
+\doublespacing
+\clearpage
+
+* Abstract
+** Code                                                       :ignore:
+# First, make sure all variables are availabe
+#+BEGIN_SRC R :results silent :exports none :session
+source("@@name@@_load.R")
+#+END_SRC
+
+** Text                                                       :ignore:
+@@latex:\noindent@@ *Objective:* 
+
+@@latex:\noindent@@ *Method:* 
+
+@@latex:\noindent@@ *Results:* 
+
+@@latex:\noindent@@ *Conclusions:* 
+
+\clearpage
+
+* Introduction                                                  
+** Text                                                       :ignore:
+* Materials and Methods
+* Results
+** Code                                                :noexport:ignore:
+#+BEGIN_SRC R :results silent :session
+#+END_SRC
+** Text                                                         :ignore:
+* Discussion                                                  
+\clearpage
+
+* Acknowledgments                                              
+
+* Conflict of Interest
+\clearpage
+
+* References                                                  :ignore:
+\bibliographystyle{nature}
+\bibliography{master}
+\clearpage
+
+* Tables and Figures
+\singlespacing
+** Table. Sample                                              :ignore:
+*** Code                                             :noexport:ignore:
+#+NAME: table1 
+# HEADER: :exports results 
+# BEGIN_SRC R :results value :colnames yes :session :cache nil
+# cc <- parse_table(cc)
+# return(cc)
+# END_SRC
+
+*** Table                                                       :ignore:
+#+CAPTION: *Sample characteristics*.
+#+CAPTION: /Abbreviations/: 
+#+ATTR_LATEX: :align lrrrrrrr
+#+NAME: table1
+
+\clearpage
+
+** Figure1                                                           :ignore:
+#+NAME: cropfigvol
+#+BEGIN_SRC sh :exports results :results silent
+# if [ ! -f ../output/figures/fig1.pdf]; then 
+#    pdfcrop ../output/figures/fig1.pdf
+# fi 
+#+END_SRC
+#+CAPTION: *Figure title*
+#+NAME: fig1
+#+ATTR_LATEX: :width 1.0\textwidth 
+
+\clearpage
