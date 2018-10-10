@@ -1,8 +1,6 @@
 
 # Making Research Reproducible
 
-\doublespacing
-\clearpage
 
 
 ## Author
