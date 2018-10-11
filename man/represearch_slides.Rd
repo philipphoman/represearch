@@ -4,7 +4,10 @@
 \alias{represearch_slides}
 \title{represearch_slides}
 \usage{
-represearch_slides()
+represearch_slides(destfile = "~/Downloads/rep.pdf")
+}
+\arguments{
+\item{destfile}{Destination for downloaded slides.}
 }
 \description{
 This function dowloads the pdf presentation
