@@ -119,6 +119,10 @@ create_project <- function(tags=list("name"="myproject",
     #system(paste("touch ", fn, "/NULL", sep=""))
     file.create(paste(fn, "NULL", sep="/"))
   }
+
+  # create mock data file
+  file.create(paste(tags$name, "/data/", tags$name, ".csv", sep=""))
+
   for (i in 1:length(files)) { 
     #from <- paste(project_tags$name, "/templates/", files[i], sep=""))
     from <- system.file("templates", files[i], package="represearch")
