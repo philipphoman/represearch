@@ -57,6 +57,7 @@ create_project <- function(tags=list("name"="myproject",
   )
   files <- c(
     "README.org",
+    "README.md",
     "LICENSE",
     "Makefile",
     "ms.org",
@@ -83,6 +84,7 @@ create_project <- function(tags=list("name"="myproject",
   )
   targets <- c(
     paste(tags$name, "README.org", sep="/"),
+    paste(tags$name, "README.md", sep="/"),
     paste(tags$name, "LICENSE", sep="/"),
     paste(tags$name, "Makefile", sep="/"),
     paste(tags$name, "/src/",tags$name, "_ms.org", sep=""),
