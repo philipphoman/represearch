@@ -44,6 +44,7 @@ create_project <- function(tags=list("name"="myproject",
                                      "root"="~\\/projects"),
                            flavor="org-mode") {
   subdirs <- c(
+    "data",
     "src",
     "lib",
     "doc",
@@ -115,7 +116,8 @@ create_project <- function(tags=list("name"="myproject",
     fn <- paste(tags$name, "/", subdirs[i], sep="")
     print(fn)
     dir.create(fn, recursive=TRUE)
-    system(paste("touch ", fn, "/NULL", sep=""))
+    #system(paste("touch ", fn, "/NULL", sep=""))
+    file.create(paste(fn, "NULL", sep="/"))
   }
   for (i in 1:length(files)) { 
     #from <- paste(project_tags$name, "/templates/", files[i], sep=""))
