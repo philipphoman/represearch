@@ -405,6 +405,22 @@ get_partcorr_vec <- function(lmfit, xc) {
   return(data.frame(x=x, y=y))
 }
 
+#' represearch_slides
+#'
+#' This function dowloads the pdf presentation 
+#' @keywords reproducible research 
+#' @export
+represearch_slides <- function() {
+  #url1 <- 'https://github.com/philipphoman/mrr/'
+  #url2 <- 'raw/master/src/mrr_presentation.pdf'
+  url1 <- "https://raw.githubusercontent.com/philipphoman/"
+  url2 <- "mrr/master/src/mrr_presentation.pdf"
+  url <- paste(url1, url2, sep="")
+  download.file(url, destfile="/tmp/represearch.pdf", method="curl")
+# https://github.com/philipphoman/mrr/raw/master/src/mrr_presentation.pdf
+}
+
+
 #df_sum_stats <- function(df) { 
 # dfm <- df %>% gather(key=Characteristic, value=Value) %>%
 #				group_by(Characteristic) %>%

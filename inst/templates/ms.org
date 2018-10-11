@@ -46,7 +46,7 @@
 #+LATEX_HEADER: \DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{% 
 #+LATEX_HEADER:       #1\;\delimsize\|\;#2% 
 #+LATEX_HEADER: } 
-#+LATEX_HEADER: \newcommand{\noop}[1]{}
+# LATEX_HEADER: \newcommand{\noop}[1]{}
 #+LATEX_HEADER: \newcommand{\infdiv}{D_{KL}\infdivx} 
 #+LATEX_HEADER: \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 #+LATEX_HEADER: \newcommand\sumin{\sum_{i=1}^{n}}
