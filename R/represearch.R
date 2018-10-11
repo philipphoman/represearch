@@ -146,8 +146,8 @@ create_project <- function(tags=list("name"="myproject",
 parse_template <- function(filename, tags) {
   tmpfn <- paste(rand_str(1), ".txt", sep="")
   for (i in 1:length(tags)) {
-    system(paste("sed -e 's/@@", names(tags)[i], "@@/",
-                 tags[[i]], "/g' ", filename, " > ", tmpfn, sep=""))
+    system(paste("sed -e \"s/@@", names(tags)[i], "@@/",
+                 tags[[i]], "/g\" ", filename, " > ", tmpfn, sep=""))
     file.copy(tmpfn, filename, overwrite=TRUE)
     unlink(tmpfn)
   }
