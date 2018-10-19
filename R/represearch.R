@@ -440,3 +440,30 @@ represearch_slides <- function(destfile="~/Downloads/rep.pdf") {
 #												 Max=round(max(Value, na.rm=TRUE), 1)) 
 #
 #}
+
+#' parse_lmer 
+#'
+#' This function parses and formats an lmerfit object 
+#' @param lmerfit lmer object.
+#' @param ind1 First index.
+#' @param ind2 Second index.
+#' @param sqrt_b Take the square root of the coefficient. Default FALSE.
+#' @keywords parsing, text, org-mode, lme4, mixed models 
+#' @export
+parse_lmer   <- function(lmerfit, ind1, ind2, sqrt_b=FALSE){
+  #
+  # report lmer results in text
+  # print beta, df, t-, and p-value
+  b <- ifelse(sqrt_b,
+              round(sqrt(fixef(m1)[ind1]), 2),
+              round(fixef(m1)[ind1], 2))
+  
+              
+  print(paste("*b* = ",  b,
+              ", 95% CI: ", round(confint(lmerfit)[3, 1], 2), 
+              ", ", round(confint(lmerfit)[3, 2], 2),
+              "; ", "*t*(", round(summary(lmerfit)$coef[ind1, 3], 2), 
+              ") = ", round(summary(lmerfit)$coef[ind1, 4], 2), 
+              ", *p* = ", round(summary(lmerfit)$coef[ind1, 5], 3), 
+              sep = ""))
+}
