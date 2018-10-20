@@ -324,15 +324,18 @@ parse_lm <- function(lmfit, index=2, scaled=FALSE, style="beta") {
 
 #' parse_estci
 #'
-#' This function parses and formats an estimate with 95% CI.
-#' @param dat Data frame (from lsmeans) 
+#' This function parses and formats an lsmeans estimate with 95% CI.
+#' @param dat Object from lsmeans.
 #' @keywords stats, estimate, confidence interval
 #' @export
-parse_estci <- function(dat) {
+parse_estci <- function(lsm) {
+  dat <- as.data.frame(confint(lsm$contr))
+  pval <- summary(lsm)$p.value
   str <- paste("b = ", round(dat$estimate, 2),
                ", 95% CI: [", round(dat$lower.CL, 2),
                "; ", round(dat$upper.CL, 2),
-               "])", sep="")
+               "], ",
+               "P ", parse_pval(pval), sep="")
   print(str)
 }
 
