@@ -330,7 +330,7 @@ parse_lm <- function(lmfit, index=2, scaled=FALSE, style="beta") {
 #' @export
 parse_estci <- function(lsm) {
   dat <- as.data.frame(confint(lsm$contr))
-  pval <- summary(lsm)$p.value
+  pval <- summary(lsm$contr)$p.value
   str <- paste("b = ", round(dat$estimate, 2),
                ", 95% CI: [", round(dat$lower.CL, 2),
                "; ", round(dat$upper.CL, 2),
