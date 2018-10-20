@@ -317,6 +317,21 @@ parse_lm <- function(lmfit, index=2, scaled=FALSE, style="beta") {
          })
 }
 
+
+#' parse_estci
+#'
+#' This function parses and formats an estimate with 95% CI.
+#' @param dat Data frame (from lsmeans) 
+#' @keywords stats, estimate, confidence interval
+#' @export
+parse_estci <- function(dat) {
+  str <- paste("b = ", round(dat$estimate, 2),
+               ", 95% CI: [", round(dat$lower.CL, 2),
+               "; ", round(dat$upper.CL, 2),
+               "])", sep="")
+  print(str)
+}
+
 #' parse_fstat
 #'
 #' This function parses and formats an anova table
