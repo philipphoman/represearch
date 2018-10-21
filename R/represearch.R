@@ -335,7 +335,7 @@ parse_estci <- function(lsm) {
                ", 95% CI: [", round(dat$lower.CL, 2),
                "; ", round(dat$upper.CL, 2),
                "], ",
-               "P ", parse_pval(pval), sep="")
+               "/P/ ", parse_pval(pval), sep="")
   print(str)
 }
 
