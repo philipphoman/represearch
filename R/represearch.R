@@ -392,7 +392,7 @@ parse_table <- function(tabdf) {
 #' @export
 #' @examples
 #' parse_pval(0.0001, 2)
-parse_pval <- function(pval, rf=2, chs="steq") {
+parse_pval <- function(pval, rf=3, chs="steq") {
   if(pval < 0.001) {
     fp <- "0.001"
     char <- "< "
