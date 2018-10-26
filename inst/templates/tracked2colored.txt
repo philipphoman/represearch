@@ -1,0 +1,10 @@
+Sub tracked_to_colored()           
+    tempState = ActiveDocument.TrackRevisions
+    ActiveDocument.TrackRevisions = False    
+    For Each Change In ActiveDocument.Revisions        
+        Set myRange = Change.Range
+        myRange.Revisions.AcceptAll
+        myRange.Font.ColorIndex = wdBlue           
+    Next    
+    ActiveDocument.TrackRevisions = tempState
+End Sub
