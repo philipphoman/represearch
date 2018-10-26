@@ -4,7 +4,7 @@
 \alias{parse_pval}
 \title{parse_pval}
 \usage{
-parse_pval(pval, rf = 2, chs = "steq")
+parse_pval(pval, rf = 3, chs = "steq")
 }
 \arguments{
 \item{pval}{P-value}
