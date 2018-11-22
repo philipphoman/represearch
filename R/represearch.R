@@ -352,8 +352,8 @@ parse_estci <- function(lsm) {
 parse_fstat <- function(anovatab, index) {
 	a <- as.data.frame(anovatab)[index, ]
 	print(paste("/F/ (", round(a$NumDF, 2), ", ", round(a$DenDF, 2), 
-				") = ", round(a$"F value", 2), ", /P/ ", parse_vals("pval", 
-				a$"Pr(>F)"), sep=""))
+              ") = ", round(a[, grep("F.value", colnames(a))], 2),
+              ", /P/ ", parse_vals("pval", a$"Pr(>F)"), sep=""))
 }
 
 #' parse_chi
