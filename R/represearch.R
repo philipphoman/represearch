@@ -271,7 +271,7 @@ parse_rstat <- function(rstat, method="pearson") {
                        parse_vals("pval", rstat$p.value), sep=""))
          },
          spearman = {
-           print(paste("\\rho = ",
+           print(paste("rho = ",
                        round(rstat$estimate, 2), ", /P/ ",
                        parse_vals("pval", rstat$p.value), sep=""))
          })
