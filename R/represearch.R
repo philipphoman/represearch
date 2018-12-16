@@ -497,7 +497,7 @@ parse_lmer   <- function(lmerfit, ind1, ind2, sqrt_b=FALSE){
 #' propstat <- prop.test(c(100, 110), c(200, 200))
 #' parse_propstat(propstat)
 parse_propstat <- function(propstat) {
-	print(paste("\\chi^{2} (", round(tstat$parameter,2), ") = ",
+	print(paste("\\chi^{2} (", round(propstat$parameter,2), ") = ",
 				round(propstat$statistic, 2), ", /P/ ", parse_vals("pval", 
 				propstat$p.value), sep=""))
 }
