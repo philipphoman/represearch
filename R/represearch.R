@@ -282,7 +282,7 @@ parse_rstat <- function(rstat, method="pearson") {
 #' This function parses and formats an linear model object.
 #' @param lmfit lm object 
 #' @param index Line index in data frame 
-#' @param scaled Was the predicor scaled. Defaults to FALSE. 
+#' @param scaled Was the predicor scaled? Defaults to FALSE. 
 #' @param style Output format. Defaults to beta. 
 #' @keywords stats, linear model
 #' @export
@@ -484,4 +484,20 @@ parse_lmer   <- function(lmerfit, ind1, ind2, sqrt_b=FALSE){
               ") = ", round(summary(lmerfit)$coef[ind1, 4], 2), 
               ", *p* = ", round(summary(lmerfit)$coef[ind1, 5], 3), 
               sep = ""))
+}
+
+
+#' parse_propstat 
+#'
+#' This function parses and formats a equal proportions statistic.
+#' @param propstat prop.test object 
+#' @keywords stats, proportions
+#' @export
+#' @examples
+#' propstat <- prop.test(c(100, 110), c(200, 200))
+#' parse_propstat(propstat)
+parse_propstat <- function(propstat) {
+	print(paste("\\chi^{2} (", round(tstat$parameter,2), ") = ",
+				round(propstat$statistic, 2), ", /P/ ", parse_vals("pval", 
+				propstat$p.value), sep=""))
 }

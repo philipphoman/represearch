@@ -62,6 +62,7 @@ DOCX = $(SRC)/$(PROJ)_ms.docx
 
 # git dir for export
 SUBGIT = $(TMP)/$(PROJ)
+SUBGITSTR = git@github.com:/philipphoman
 
 # Python directory
 PYTHONDIR = $(PREPROC)
@@ -94,15 +95,16 @@ PDFMERGEBIN = ext/pdfmerge
 CPBIN = cp
 MKDIRBIN = mkdir
 
+# to extract all citations and compile bibliography
+BIBEXP = bibexport -o
+BIBLIOGRAPHY = $(EXT)/$(PROJ)_bibliography.bib 
+
 # list R files
 #RFILES = $(wildcard $(SRC)/*.R)
 RFILES = $(SRC)/$(PROJ)_do.R \
 
 # list data files
 DATAFILES = $(DATA)/$(PROJ).csv \
-
-# list python files
-PYTHONFILES = $(wildcard $(PYTHONDIR)/$(PROJ)*.py)
 
 # list tex files
 #TEXFILES = $(wildcard $(SRC)/*.tex)
@@ -181,12 +183,10 @@ $(SRC)/%.aux: $(SRC)/%.tex $(ROUTFILES) $(PDFLIB)
 	#cd $(SRC) && $(TEX) $(notdir $<)
 	#cd $(SRC) && $(TEX) $(notdir $<) 
 	cd $(SRC) && $(LATEXMK) $(notdir $<)
+	$(BIBEXP) $(BIBLIOGRAPHY) $(SRC)/$(PROJ)_ms.aux
 
 # Default entry
 all: figures manuscript presentation
-
-$(PDFMERGEDFIG): $(ROUTFILES)
-	$(PDFMERGEBIN) $(PDFMERGEDFIG) $(wildcard $(FIGS)/$(PROJ)*.pdf)
 
 # make manuscript
 manuscript: figures tex
@@ -221,18 +221,6 @@ bayes: $(HBRWSIMOUT) $(HBRWOUT)
 
 # fmri group analysis
 #fmri: 
-
-# view figures
-figview: figures
-	$(VIEWBIN) $(wildcard $(FIGS)/*.pdf) &
-
-# merge pdf figures
-mergefig: $(PDFMERGEDFIG)
-
-# view merged figures
-mergefigview: mergefig
-	$(VIEWBIN) $(PDFMERGEDFIG) & 
-
 
 # convert manuscript to rtf
 # this is really dirty code
