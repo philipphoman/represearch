@@ -11,7 +11,7 @@ parse_lm(lmfit, index = 2, scaled = FALSE, style = "beta")
 
 \item{index}{Line index in data frame}
 
-\item{scaled}{Was the predicor scaled. Defaults to FALSE.}
+\item{scaled}{Was the predicor scaled? Defaults to FALSE.}
 
 \item{style}{Output format. Defaults to beta.}
 }
