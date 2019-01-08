@@ -144,6 +144,11 @@
 
 (add-to-list 'org-structure-template-alist
  '("er" "#+END_SRC"))
+ 
+; custom links
+; set tags identation
+(setq org-tags-column -72)
+
 
 #+END_SRC
 # ----------------------------------------------------------------------
