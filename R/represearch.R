@@ -501,3 +501,32 @@ parse_propstat <- function(propstat) {
 				round(propstat$statistic, 2), ", /P/ ", parse_vals("pval", 
 				propstat$p.value), sep=""))
 }
+
+#' annotate_regression
+#'
+#' This function parses an lmfit object, extracts the partial
+#' correlation between the last predictor of the model and the outcome,
+#' and adds it to a ggplot object in the right hand corner. Assumes
+#' that the variables are standardized and that the predictor of
+#' interest is the last one in the model.
+#' @param lmfit an linear model fit object
+#' @param ggp a ggplot2 object
+#' @keywords regression, ggplot2, annotation
+#' @export
+annotate_regression <- function(lmfit, ggp) {
+  #
+  # annotate a regression plot
+  slmfit <- coef(summary(lmfit))
+  nr <- nrow(slmfit)
+  nc <- ncol(slmfit)
+  r <- slmfit[nr, 1]
+  p <- slmfit[nr, nc]
+  a <- represearch::starsfromp(p)
+  ggp2 <- ggp +
+    annotate("text", x=Inf, y=Inf, size=10,
+             hjust=1, vjust=1,
+             label=paste0("r=", round(r, 2), starsfromp(p)))
+  return(ggp2)
+}
+
+
