@@ -4,7 +4,7 @@
 \alias{annotate_regression}
 \title{annotate_regression}
 \usage{
-annotate_regression(lmfit, ggp)
+annotate_regression(lmfit, ggp, font_size = 10)
 }
 \arguments{
 \item{lmfit}{an linear model fit object}

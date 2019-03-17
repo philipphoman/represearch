@@ -513,7 +513,7 @@ parse_propstat <- function(propstat) {
 #' @param ggp a ggplot2 object
 #' @keywords regression, ggplot2, annotation
 #' @export
-annotate_regression <- function(lmfit, ggp) {
+annotate_regression <- function(lmfit, ggp, font_size=10) {
   #
   # annotate a regression plot
   slmfit <- coef(summary(lmfit))
@@ -523,7 +523,7 @@ annotate_regression <- function(lmfit, ggp) {
   p <- slmfit[nr, nc]
   a <- represearch::starsfromp(p)
   ggp2 <- ggp +
-    annotate("text", x=Inf, y=Inf, size=10,
+    annotate("text", x=Inf, y=Inf, size=font_size,
              hjust=1, vjust=1,
              label=paste0("r=", round(r, 2), starsfromp(p)))
   return(ggp2)
