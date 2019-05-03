@@ -97,7 +97,7 @@ MKDIRBIN = mkdir
 
 # to extract all citations and compile bibliography
 BIBEXP = bibexport -o
-BIBLIOGRAPHY = $(EXT)/$(PROJ)_bibliography.bib 
+BIBLIOGRAPHY = $(SRC)/$(PROJ).bib 
 
 # list R files
 #RFILES = $(wildcard $(SRC)/*.R)
