@@ -81,7 +81,8 @@ create_project <- function(tags=list("name"="myproject",
     "logo_feinstein.pdf",
     "github.pdf",
     "twitter.pdf",
-    "beamerthemefeinstein.sty"
+    "beamerthemefeinstein.sty",
+    "nature.bst"
   )
   targets <- c(
     paste(tags$name, "README.org", sep="/"),
@@ -108,7 +109,8 @@ create_project <- function(tags=list("name"="myproject",
     paste(tags$name, "/ext/logos/", "logo_feinstein.pdf", sep=""),
     paste(tags$name, "/ext/logos/", "github.pdf", sep=""),
     paste(tags$name, "/ext/logos/", "twitter.pdf", sep=""),
-    paste(tags$name, "/ext/", "beamerthemefeinstein.sty", sep="")
+    paste(tags$name, "/ext/", "beamerthemefeinstein.sty", sep=""),
+    paste(tags$name, "/ext/", "nature.bst", sep="")
   )
   
   #dir.create(project_tags$name)

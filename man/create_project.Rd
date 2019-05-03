@@ -7,7 +7,7 @@
 create_project(tags = list(name = "myproject", title = "My Project",
   shorttitle = "My short title", author = "Firstname Lastname", email =
   "lastname at inst dot edu", git =
-  "https:\\\\/\\\\/github.com\\\\/mypath", bibliography = "master",
+  "https:\\\\/\\\\/github.com\\\\/mypath", bibliography = "myproject",
   bibstyle = "nature", keywords = "git; org-mode; R", date = date(), inst =
   "My Institution", root = "~\\\\/projects"), flavor = "org-mode")
 }
