@@ -421,14 +421,22 @@ get_partcorr_vec <- function(lmfit, xc) {
   #
   # return partial correlations vectors
   #
-  ff <- tempfile()
-  png(filename=ff)
-  a <- car::avPlots(lmfit)
-  dev.off()
-  unlink(ff)
-  x <- as.data.frame(a[xc])[, 1]
-  y <- as.data.frame(a[xc])[, 2]
-  return(data.frame(x=x, y=y))
+  #ff <- tempfile()
+  #png(filename=ff)
+  #a <- car::avPlots(lmfit)
+  #dev.off()
+  #unlink(ff)
+  #x <- as.data.frame(a[xc])[, 1]
+  #y <- as.data.frame(a[xc])[, 2]
+  vdf <- get_all_vars(lmfit)
+  yc <- colnames(vdf)[1]
+  vdfs <- vdf[, -1]
+  covsc <- colnames(vdfs[, -which(names(vdfs) %in% xc)])
+  fm1 <- formula(paste0(yc, " ~ ", paste0(covsc, collapse="+")))
+  fm2 <- formula(paste0(xc, " ~ ", paste0(covsc, collapse="+")))
+  yr <- lm(fm1, data=vdf)$residuals
+  xr <- lm(fm2, data=vdf)$residuals
+  return(data.frame(x=xr, y=yr))
 }
 
 #' represearch_slides
