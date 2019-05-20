@@ -423,17 +423,10 @@ get_partcorr_vec <- function(lmfit, xc) {
   #
   # return partial correlations vectors
   #
-  #ff <- tempfile()
-  #png(filename=ff)
-  #a <- car::avPlots(lmfit)
-  #dev.off()
-  #unlink(ff)
-  #x <- as.data.frame(a[xc])[, 1]
-  #y <- as.data.frame(a[xc])[, 2]
   vdf <- get_all_vars(lmfit, data=eval(lmfit$call$data))
   yc <- colnames(vdf)[1]
   vdfs <- vdf[, -1]
-  covsc <- colnames(vdfs[, -which(names(vdfs) %in% xc)])
+  covsc <- colnames(subset(vdfs, select=-which(names(vdfs) %in% xc)))
   fm1 <- formula(paste0(yc, " ~ ", paste0(covsc, collapse="+")))
   fm2 <- formula(paste0(xc, " ~ ", paste0(covsc, collapse="+")))
   yr <- lm(fm1, data=vdf)$residuals
