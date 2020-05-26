@@ -292,7 +292,7 @@ parse_rstat <- function(rstat, method="pearson") {
 #' lmfit <- lm(rnorm(100, 0, 1) ~ rnorm(100, 0, 1))
 #' parse_lm(lmfit, 1, FALSE, "beta")
 parse_lm <- function(lmfit, index=2, scaled=FALSE, style="beta") {
-	lsm <- as.data.frame(coef(summary(lm.beta(lmfit))))[index, ]
+	lsm <- as.data.frame(coef(summary(lm.beta::lm.beta(lmfit))))[index, ]
 	if (scaled==FALSE) {
 	  beta <- lm.beta::lm.beta(lmfit)$standardized.coefficients[index]
   } 
@@ -337,7 +337,7 @@ parse_estci <- function(lsm) {
                ", 95% CI: [", round(dat$lower.CL, 2),
                "; ", round(dat$upper.CL, 2),
                "], ",
-               "/P/ ", parse_pval(pval), sep="")
+               "P ", parse_pval(pval), sep="")
   print(str)
 }
 
