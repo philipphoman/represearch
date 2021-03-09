@@ -423,7 +423,8 @@ get_partcorr_vec <- function(lmfit, xc) {
   #
   # return partial correlations vectors
   #
-  vdf <- get_all_vars(lmfit, data=eval(lmfit$call$data))
+  data <- as.data.frame(eval(lmfit$call$data))
+  vdf <- get_all_vars(lmfit, data=data)
   yc <- colnames(vdf)[1]
   vdfs <- vdf[, -1]
   covsc <- colnames(subset(vdfs, select=-which(names(vdfs) %in% xc)))
