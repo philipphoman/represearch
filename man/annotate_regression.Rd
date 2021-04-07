@@ -4,12 +4,16 @@
 \alias{annotate_regression}
 \title{annotate_regression}
 \usage{
-annotate_regression(lmfit, ggp, font_size = 10)
+annotate_regression(lmfit, ggp, font_size = 10, location = "topright")
 }
 \arguments{
 \item{lmfit}{an linear model fit object}
 
 \item{ggp}{a ggplot2 object}
+
+\item{font_size}{integer}
+
+\item{location}{a string}
 }
 \description{
 This function parses an lmfit object, extracts the partial

@@ -515,9 +515,12 @@ parse_propstat <- function(propstat) {
 #' interest is the last one in the model.
 #' @param lmfit an linear model fit object
 #' @param ggp a ggplot2 object
+#' @param font_size integer
+#' @param location a string
 #' @keywords regression, ggplot2, annotation
 #' @export
-annotate_regression <- function(lmfit, ggp, font_size=10) {
+annotate_regression <- function(lmfit, ggp, font_size=10,
+                                location="topright") {
   #
   # annotate a regression plot
   slmfit <- coef(summary(lmfit))
@@ -526,8 +529,25 @@ annotate_regression <- function(lmfit, ggp, font_size=10) {
   r <- slmfit[nr, 1]
   p <- slmfit[nr, nc]
   a <- represearch::starsfromp(p)
+  if (location == "topright") {
+    x <- Inf
+    y <- Inf
+  }
+  if (location == "topleft") {
+    x <- -Inf
+    y <- Inf
+  }
+  if (location == "bottomright") {
+    x <- Inf
+    y <- -Inf
+  }
+  if (location == "bottomleft") {
+    x <- -Inf
+    y <- -Inf
+  }
+
   ggp2 <- ggp +
-    annotate("text", x=Inf, y=Inf, size=font_size,
+    annotate("text", x=x, y=y, size=font_size,
              hjust=1, vjust=1,
              label=paste0("r=", round(r, 2), starsfromp(p)))
   return(ggp2)
