@@ -372,17 +372,19 @@ parse_chi <- function(chisq, def) {
 				", /P/ ", parse_vals("pval", pval), sep=""))
 }
 
-#' parse_effectsize
+#' parse_pwr
 #'
-#' This function parses and formats an effect size 
-#' @param es d effect size
-#' @param type type of effect size
+#' This function parses and formats a pwr object
+#' @param pwr object from pwr library
+#' @param param type of variable
 #' @param  digits number of decimal places
 #' @keywords stats 
 #' @export
-parse_effectsize <- function(es, type="d", digits=2) {
-	print(paste0("/", type, "/ = ",
-				round(es, digits)))
+parse_pwr <- function(pwr, param="d", digits=2) {
+  switch(param,
+         d={print(paste0("/d/ = ", round(pwr$d, digits)))},
+         n={print(paste0("/N/ = ", round(pwr$n, digits)))}
+         )
 }
 
 #' parse_table
