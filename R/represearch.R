@@ -381,7 +381,6 @@ parse_chi <- function(chisq, def) {
 #' @keywords stats 
 #' @export
 parse_effectsize <- function(es, type="d", digits=2) {
-	pval <- pchisq(chisq, def, lower=FALSE)
 	print(paste0("/", type, "/ = ",
 				round(es, digits)))
 }
