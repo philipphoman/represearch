@@ -372,6 +372,20 @@ parse_chi <- function(chisq, def) {
 				", /P/ ", parse_vals("pval", pval), sep=""))
 }
 
+#' parse_effectsize
+#'
+#' This function parses and formats an effect size 
+#' @param es d effect size
+#' @param type type of effect size
+#' @param  digits number of decimal places
+#' @keywords stats 
+#' @export
+parse_effectsize <- function(es, type="d", digits=2) {
+	pval <- pchisq(chisq, def, lower=FALSE)
+	print(paste0("/", type, "/ = ",
+				round(es, digits)))
+}
+
 #' parse_table
 #'
 #' This function removes any nils by replacing NA by whitespace
