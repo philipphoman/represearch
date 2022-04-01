@@ -383,6 +383,7 @@ parse_chi <- function(chisq, def) {
 parse_pwr <- function(pwr, param="d", digits=2) {
   switch(param,
          d={print(paste0("/d/ = ", round(pwr$d, digits)))},
+         r={print(paste0("/r/ = ", round(pwr$r, digits)))},
          n={print(paste0("/N/ = ", ceiling(pwr$n)))}
          )
 }
