@@ -4,7 +4,7 @@
 \alias{parse_currency}
 \title{parse_currency}
 \usage{
-parse_currency(amount, currrency)
+parse_currency(amount, currency)
 }
 \arguments{
 \item{amount}{amount}
