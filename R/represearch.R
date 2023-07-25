@@ -407,7 +407,7 @@ parse_table <- function(tabdf) {
 #' @keywords org-mode, table 
 #' @export
 parse_currency <- function(amount, currency) {
-  str <- paste0("\\SI{", amount, "}[\\", currency, "]")
+  str <- print(paste0("\\SI{", amount, "}[\\", currency, "]"))
 	return(str)
 }
 
