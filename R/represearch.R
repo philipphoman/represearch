@@ -399,6 +399,18 @@ parse_table <- function(tabdf) {
 	return(tabdf)
 }
 
+#' parse_currency
+#'
+#' This function will parse a currency amount
+#' @param amount amount
+#' @param currency currency
+#' @keywords org-mode, table 
+#' @export
+parse_currency <- function(amount, currrency) {
+  switch(currency,
+  str <- paste0("SI{", amount, "}[\\", currency, "]")
+	return(str)
+}
 
 #' parse_pval
 #'
